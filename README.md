@@ -2,7 +2,7 @@
 
 # Sharma's Chamber of Law
 
-**Welcome to Sharma's Chamber of Law** – a premier legal firm committed to delivering justice, protecting rights, and empowering our clients with exceptional legal representation.
+Welcome to Sharma's Chamber of Law , a premier legal firm committed to delivering justice, protecting rights, and empowering our clients with exceptional legal representation.
 
 ---
 
