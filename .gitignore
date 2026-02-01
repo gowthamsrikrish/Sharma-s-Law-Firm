@@ -1,30 +1,12 @@
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+```
+# Backup files
+css/styles_original_backup.css
+js/script_original_backup.js
 
-# IDE files
-.idea/
-.vscode/
-*.swp
-*.swo
+# Build artifacts
+css/styles_refactored.css
+js/script_refactored.js
 
-# Dependencies
-node_modules/
-npm-debug.log
-yarn-debug.log
-yarn-error.log
-
-# Build files
-dist/
-build/
-
-# Keep website files
-!index.html
-!css/
-!js/
-!assets/ 
+# Generated documentation
+REFACTORING_SUMMARY.md
+```

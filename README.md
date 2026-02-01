@@ -1,8 +1,32 @@
 ---
 
-# Sharma's Chamber of Law
+# Sharma's Chamber of Law - Refactored
 
-Welcome to Sharma's Chamber of Law , a premier legal firm committed to delivering justice, protecting rights, and empowering our clients with exceptional legal representation.
+Welcome to Sharma's Chamber of Law, a premier legal firm committed to delivering justice, protecting rights, and empowering our clients with exceptional legal representation.
+
+This repository has been refactored to improve code quality, maintainability, and performance.
+
+---
+
+## 🔄 Refactoring Improvements
+
+The following improvements were made during the refactoring process:
+
+### CSS Improvements
+- **Organized structure**: CSS rules are now organized by component type for better readability
+- **Modular design**: Styles are grouped into logical sections (typography, navigation, components, etc.)
+- **Responsive enhancements**: Improved responsive design with flexible grid layouts
+- **Performance optimization**: Reduced redundancy and improved efficiency
+
+### JavaScript Improvements  
+- **Object-oriented approach**: Converted procedural code to a class-based structure
+- **Modular functions**: Broke down functionality into smaller, focused methods
+- **Better error handling**: Added checks for element existence and error handling
+- **Cleaner event handling**: Organized event listeners and improved functionality
+
+### HTML Enhancements
+- **Semantic improvements**: Maintained semantic structure while connecting to refactored assets
+- **Asset references**: Updated to use refactored CSS and JS files
 
 ---
 
