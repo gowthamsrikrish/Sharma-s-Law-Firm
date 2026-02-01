@@ -84,3 +84,18 @@ Let us be your trusted legal partner in navigating the complexities of law and a
 > _"Justice delayed is justice denied. At Sharma's Chamber of Law, we ensure your voice is heard, and your rights are protected without delay."_
 
 ---
+
+---
+
+## 🛠️ Admin Features
+
+This website includes an administrative panel for managing court case information:
+
+- **Court Case Search**: Search for cases by advocate name from the Mahabubnagar District Courts database
+- **Secure Admin Access**: Token-based authentication to protect sensitive information
+- **Real-time Data**: Direct integration with court systems for up-to-date case information
+- **Responsive Interface**: Works on desktop and mobile devices
+
+For setup and usage instructions, please refer to the [Admin Panel Documentation](README_ADMIN.md).
+
+---

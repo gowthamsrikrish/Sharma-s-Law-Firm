@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Court Case Search</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Admin-specific styles */
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--white);
+            min-height: 100vh;
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .admin-header h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .search-section {
+            background: var(--light-bg);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .search-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .search-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .search-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .results-section {
+            margin-top: 30px;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .results-count {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: var(--white);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .results-table th,
+        .results-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .results-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .results-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .results-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+        }
+        
+        .loading i {
+            font-size: 24px;
+            margin-right: 10px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #c62828;
+        }
+        
+        .success-message {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #2e7d32;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+        
+        .page-btn {
+            padding: 8px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .page-btn.active {
+            background-color: var(--secondary-color);
+        }
+        
+        .page-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                min-width: 100%;
+            }
+            
+            .results-table {
+                font-size: 14px;
+            }
+            
+            .results-table th,
+            .results-table td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1><i class="fas fa-gavel"></i> Admin Panel - Court Case Search</h1>
+            <p>Search for court cases by advocate name</p>
+        </header>
+        
+        <section class="search-section">
+            <form id="searchForm" class="search-form">
+                <input 
+                    type="text" 
+                    id="advocateName" 
+                    class="search-input" 
+                    placeholder="Enter advocate name (e.g., T Venkat Rama Sharma)" 
+                    required
+                >
+                <button type="submit" id="searchBtn" class="search-btn">
+                    <i class="fas fa-search"></i> Search Cases
+                </button>
+            </form>
+        </section>
+        
+        <section id="resultsSection" class="results-section" style="display: none;">
+            <div class="results-header">
+                <h2>Search Results</h2>
+                <div id="resultsCount" class="results-count">0 cases found</div>
+            </div>
+            
+            <div id="resultsContent">
+                <!-- Results will be loaded here -->
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchForm = document.getElementById('searchForm');
+            const advocateNameInput = document.getElementById('advocateName');
+            const searchBtn = document.getElementById('searchBtn');
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsContent = document.getElementById('resultsContent');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            // Admin token - in a real application, this would be more securely managed
+            const ADMIN_TOKEN = 'your_secure_admin_token_here';
+            
+            searchForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const advocateName = advocateNameInput.value.trim();
+                if (!advocateName) {
+                    alert('Please enter an advocate name');
+                    return;
+                }
+                
+                await searchCases(advocateName);
+            });
+            
+            async function searchCases(advocateName) {
+                try {
+                    searchBtn.disabled = true;
+                    searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+                    resultsContent.innerHTML = `
+                        <div class="loading">
+                            <i class="fas fa-spinner"></i> Fetching cases for "${advocateName}"...
+                        </div>
+                    `;
+                    resultsSection.style.display = 'block';
+                    
+                    const response = await fetch('/api/cases/search', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${ADMIN_TOKEN}`
+                        },
+                        body: JSON.stringify({ advocateName })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+                    }
+                    
+                    displayResults(data);
+                    
+                } catch (error) {
+                    console.error('Error searching cases:', error);
+                    resultsContent.innerHTML = `
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Error:</strong> ${error.message}
+                        </div>
+                    `;
+                } finally {
+                    searchBtn.disabled = false;
+                    searchBtn.innerHTML = '<i class="fas fa-search"></i> Search Cases';
+                }
+            }
+            
+            function displayResults(data) {
+                resultsCount.textContent = `${data.totalCases} case(s) found for "${data.advocateName}"`;
+                
+                if (data.cases.length === 0) {
+                    resultsContent.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-inbox"></i>
+                            <h3>No cases found</h3>
+                            <p>No cases were found for the advocate "${data.advocateName}".</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let tableHTML = `
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Case Number</th>
+                                <th>Filing Date</th>
+                                <th>Status</th>
+                                <th>Category</th>
+                                <th>Party Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                data.cases.forEach((caseItem, index) => {
+                    tableHTML += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${escapeHtml(caseItem.caseNumber || 'N/A')}</td>
+                            <td>${escapeHtml(caseItem.filingDate || 'N/A')}</td>
+                            <td>${escapeHtml(caseItem.status || 'N/A')}</td>
+                            <td>${escapeHtml(caseItem.category || 'N/A')}</td>
+                            <td>${escapeHtml(caseItem.partyName || 'N/A')}</td>
+                        </tr>
+                    `;
+                });
+                
+                tableHTML += `
+                        </tbody>
+                    </table>
+                `;
+                
+                resultsContent.innerHTML = tableHTML;
+            }
+            
+            // Helper function to escape HTML
+            function escapeHtml(text) {
+                if (typeof text !== 'string') return '';
+                return text
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+        });
+    </script>
+</body>
+</html>
