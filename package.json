@@ -1,0 +1,14 @@
+{
+  "name": "sharmas-chamber-of-law",
+  "version": "1.0.0",
+  "description": "Website for Sharma's Chamber of Law - Premier legal firm in Mahbubnagar",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/file.test.js",
+    "start": "npx serve ."
+  },
+  "keywords": ["law", "legal", "website"],
+  "author": "Sharma's Chamber of Law",
+  "license": "ISC",
+  "type": "commonjs"
+}

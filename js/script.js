@@ -1,25 +1,76 @@
 // Mobile Navigation
-const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
-const navbar = document.querySelector('.navbar');
+class MobileNavigation {
+    constructor() {
+        this.hamburger = document.querySelector('.hamburger');
+        this.navLinks = document.querySelector('.nav-links');
+        this.navbar = document.querySelector('.navbar');
+        
+        if (this.hamburger && this.navLinks) {
+            this.init();
+        }
+    }
+    
+    init() {
+        this.hamburger.addEventListener('click', () => {
+            this.hamburger.classList.toggle('active');
+            this.navLinks.classList.toggle('active');
+        });
+    }
+}
 
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navLinks.classList.toggle('active');
-});
+const mobileNav = new MobileNavigation();
 
 // Navbar Scroll Effect
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
+class NavbarScrollEffect {
+    constructor() {
+        this.navbar = document.querySelector('.navbar');
+        this.lastScrollTop = 0;
+        this.isScrolling = false;
+        
+        if (this.navbar) {
+            this.init();
+        }
     }
-});
+    
+    init() {
+        // Throttle scroll events for performance
+        window.addEventListener('scroll', this.throttledScroll.bind(this), { passive: true });
+    }
+    
+    throttledScroll() {
+        if (!this.isScrolling) {
+            requestAnimationFrame(() => {
+                this.handleScroll();
+                this.isScrolling = false;
+            });
+            this.isScrolling = true;
+        }
+    }
+    
+    handleScroll() {
+        if (window.scrollY > 50) {
+            this.navbar.classList.add('scrolled');
+        } else {
+            this.navbar.classList.remove('scrolled');
+        }
+    }
+}
+
+const navbarEffect = new NavbarScrollEffect();
 
 // Smooth Scrolling
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
+class SmoothScrolling {
+    constructor() {
+        this.init();
+    }
+    
+    init() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', this.handleClick.bind(this));
+        });
+    }
+    
+    handleClick(e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
@@ -28,122 +79,232 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 block: 'start'
             });
             // Close mobile menu if open
-            if (window.innerWidth <= 768) {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-            }
+            this.closeMobileMenu();
         }
-    });
-});
+    }
+    
+    closeMobileMenu() {
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        if (window.innerWidth <= 768 && hamburger && navLinks) {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+        }
+    }
+}
+
+const smoothScroll = new SmoothScrolling();
 
 // Form Submission with Animation
-const contactForm = document.querySelector('.contact-form form');
-if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+class FormSubmission {
+    constructor() {
+        this.contactForm = document.querySelector('.contact-form form');
+        if (this.contactForm) {
+            this.init();
+        }
+    }
+    
+    init() {
+        this.contactForm.addEventListener('submit', this.handleSubmit.bind(this));
+    }
+    
+    handleSubmit(e) {
         e.preventDefault();
         
-        // Add loading animation
-        const submitButton = contactForm.querySelector('button[type="submit"]');
+        const submitButton = this.contactForm.querySelector('button[type="submit"]');
         const originalText = submitButton.textContent;
+        
+        // Add loading animation
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         submitButton.disabled = true;
 
         // Simulate form submission (replace with actual form submission)
         setTimeout(() => {
             // Show success message
-            const successMessage = document.createElement('div');
-            successMessage.className = 'success-message';
-            successMessage.innerHTML = `
-                <i class="fas fa-check-circle"></i>
-                <p>Thank you for your message. We will get back to you soon!</p>
-            `;
-            contactForm.appendChild(successMessage);
+            this.showSuccessMessage();
 
             // Reset form
-            contactForm.reset();
+            this.contactForm.reset();
             submitButton.innerHTML = originalText;
             submitButton.disabled = false;
-
-            // Remove success message after 3 seconds
-            setTimeout(() => {
-                successMessage.remove();
-            }, 3000);
         }, 1500);
-    });
+    }
+    
+    showSuccessMessage() {
+        const successMessage = document.createElement('div');
+        successMessage.className = 'success-message';
+        successMessage.innerHTML = `
+            <i class="fas fa-check-circle"></i>
+            <p>Thank you for your message. We will get back to you soon!</p>
+        `;
+        this.contactForm.appendChild(successMessage);
+
+        // Remove success message after 3 seconds
+        setTimeout(() => {
+            successMessage.remove();
+        }, 3000);
+    }
 }
 
+const formHandler = new FormSubmission();
+
 // Scroll to Top Button
-const scrollButton = document.createElement('button');
-scrollButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
-scrollButton.className = 'scroll-top';
-document.body.appendChild(scrollButton);
-
-window.addEventListener('scroll', () => {
-    if (window.pageYOffset > 300) {
-        scrollButton.style.display = 'block';
-        setTimeout(() => {
-            scrollButton.style.opacity = '1';
-        }, 10);
-    } else {
-        scrollButton.style.opacity = '0';
-        setTimeout(() => {
-            scrollButton.style.display = 'none';
-        }, 300);
+class ScrollToTopButton {
+    constructor() {
+        this.button = null;
+        this.isScrolling = false;
+        this.init();
     }
-});
+    
+    init() {
+        this.createButton();
+        this.addEventListeners();
+    }
+    
+    createButton() {
+        this.button = document.createElement('button');
+        this.button.innerHTML = '<i class="fas fa-arrow-up"></i>';
+        this.button.className = 'scroll-top';
+        document.body.appendChild(this.button);
+    }
+    
+    addEventListeners() {
+        // Throttle scroll events for performance
+        window.addEventListener('scroll', this.throttledScroll.bind(this), { passive: true });
+        
+        this.button.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+    
+    throttledScroll() {
+        if (!this.isScrolling) {
+            requestAnimationFrame(() => {
+                this.handleScroll();
+                this.isScrolling = false;
+            });
+            this.isScrolling = true;
+        }
+    }
+    
+    handleScroll() {
+        if (window.pageYOffset > 300) {
+            this.button.style.display = 'block';
+            setTimeout(() => {
+                this.button.style.opacity = '1';
+            }, 10);
+        } else {
+            this.button.style.opacity = '0';
+            setTimeout(() => {
+                this.button.style.display = 'none';
+            }, 300);
+        }
+    }
+}
 
-scrollButton.addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-});
+const scrollToTopBtn = new ScrollToTopButton();
 
 // Intersection Observer for Animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
+class AnimationObserver {
+    constructor() {
+        this.options = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        this.observer = null;
+        this.init();
+    }
+    
+    init() {
+        this.observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    this.observer.unobserve(entry.target);
+                }
+            });
+        }, this.options);
+        
+        // Observe elements for animation
+        document.querySelectorAll('.animate-on-scroll, .mission-card, .expertise-item, .feature, .stat-item, .team-feature, .contact-card').forEach(el => {
+            this.observer.observe(el);
+        });
+    }
+}
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-        }
-    });
-}, observerOptions);
-
-// Observe elements for animation
-document.querySelectorAll('.animate-on-scroll, .mission-card, .expertise-item, .feature, .stat-item, .team-feature, .contact-card').forEach(el => {
-    observer.observe(el);
-});
+const animationObserver = new AnimationObserver();
 
 // Parallax Effect for Hero Section
-const hero = document.querySelector('.hero');
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    hero.style.backgroundPositionY = `${scrolled * 0.5}px`;
-});
+class ParallaxEffect {
+    constructor() {
+        this.hero = document.querySelector('.hero');
+        this.isScrolling = false;
+        if (this.hero) {
+            this.init();
+        }
+    }
+    
+    init() {
+        window.addEventListener('scroll', this.throttledScroll.bind(this), { passive: true });
+    }
+    
+    throttledScroll() {
+        if (!this.isScrolling) {
+            requestAnimationFrame(() => {
+                this.handleScroll();
+                this.isScrolling = false;
+            });
+            this.isScrolling = true;
+        }
+    }
+    
+    handleScroll() {
+        const scrolled = window.pageYOffset;
+        this.hero.style.backgroundPositionY = `${scrolled * 0.5}px`;
+    }
+}
+
+const parallaxEffect = new ParallaxEffect();
 
 // Add loading animation to images
-document.querySelectorAll('img').forEach(img => {
-    img.addEventListener('load', () => {
-        img.classList.add('loaded');
-    });
-});
+class ImageLoader {
+    constructor() {
+        this.init();
+    }
+    
+    init() {
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('load', () => {
+                img.classList.add('loaded');
+            });
+        });
+    }
+}
+
+const imageLoader = new ImageLoader();
 
 // Initialize animations on page load
-document.addEventListener('DOMContentLoaded', () => {
-    // Add initial animation classes
-    document.querySelectorAll('.animate-on-scroll').forEach(el => {
-        el.classList.add('animate-on-scroll');
-    });
-
-    // Trigger initial animations
-    setTimeout(() => {
+class PageInitializer {
+    constructor() {
+        document.addEventListener('DOMContentLoaded', this.init.bind(this));
+    }
+    
+    init() {
+        // Add initial animation classes
         document.querySelectorAll('.animate-on-scroll').forEach(el => {
-            el.classList.add('visible');
+            el.classList.add('animate-on-scroll');
         });
-    }, 100);
-}); 
+
+        // Trigger initial animations
+        setTimeout(() => {
+            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                el.classList.add('visible');
+            });
+        }, 100);
+    }
+}
+
+const pageInitializer = new PageInitializer();

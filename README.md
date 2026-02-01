@@ -69,7 +69,8 @@ Whether you're seeking advice, representation, or just need clarity on your lega
 Mahbubnagar, Telangana, India
 
 **Reach out:**  
-(You can add phone number, email, or social media links here.)
+Phone: +91 85559 68145 | +91 96421 64246  
+Email: ravitotapally@gmail.com
 
 ---
 

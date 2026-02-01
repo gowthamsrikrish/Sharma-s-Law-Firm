@@ -1,13 +1,5 @@
 const assert = require('assert');
-
-// Test case 1: Factorial of 0
-function factorial(n) {
-  if (n === 0) {
-    return 1;
-  } else {
-    return n * factorial(n - 1);
-  }
-}
+const factorial = require('../src/factorial');
 
 // Test case 1: Factorial of 0
 function testFactorialZero() {
@@ -29,19 +21,46 @@ function testFactorialTen() {
   assert.strictEqual(factorial(10), 3628800, 'Factorial of 10 should be 3628800');
 }
 
-// Test case 5: Factorial of a negative number (should handle gracefully, though not explicitly specified)
+// Test case 5: Factorial of a negative number (should throw an error)
 function testFactorialNegative() {
-  try {
-    factorial(-1);
-  } catch (e) {
-    // Expecting an error, but not asserting on the specific error
-    // This test validates that the function doesn't throw an error for negative input.
-  }
+  assert.throws(() => factorial(-1), Error, 'Factorial of negative number should throw an error');
+}
+
+// Test case 6: Non-integer input (should throw an error)
+function testNonIntegerInput() {
+  assert.throws(() => factorial(3.5), Error, 'Factorial of non-integer should throw an error');
+}
+
+// Test case 7: String input (should throw an error)
+function testStringInput() {
+  assert.throws(() => factorial("5"), Error, 'Factorial of string should throw an error');
 }
 
 // Run the tests
-require('assert').strictEqual(testFactorialZero(), undefined, 'Test Factorial of 0 Failed');
-require('assert').strictEqual(testFactorialOne(), undefined, 'Test Factorial of 1 Failed');
-require('assert').strictEqual(testFactorialFive(), undefined, 'Test Factorial of 5 Failed');
-require('assert').strictEqual(testFactorialTen(), undefined, 'Test Factorial of 10 Failed');
-require('assert').strictEqual(testFactorialNegative(), undefined, 'Test Factorial of Negative Number Failed');
+try {
+  testFactorialZero();
+  console.log('✓ Test Factorial of 0 Passed');
+  
+  testFactorialOne();
+  console.log('✓ Test Factorial of 1 Passed');
+  
+  testFactorialFive();
+  console.log('✓ Test Factorial of 5 Passed');
+  
+  testFactorialTen();
+  console.log('✓ Test Factorial of 10 Passed');
+  
+  testFactorialNegative();
+  console.log('✓ Test Factorial of Negative Number Passed');
+  
+  testNonIntegerInput();
+  console.log('✓ Test Non-Integer Input Passed');
+  
+  testStringInput();
+  console.log('✓ Test String Input Passed');
+  
+  console.log('\nAll tests passed!');
+} catch (error) {
+  console.error('✗ Test failed:', error.message);
+  process.exit(1);
+}
